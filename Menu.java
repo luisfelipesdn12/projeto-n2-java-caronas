@@ -4,10 +4,12 @@ import java.util.Scanner;
 public class Menu {
     Scanner scanner;
     Repositorio repositorio;
+    Optional<Usuario> usuarioLogado;
 
     public Menu(Repositorio repositorio) {
         scanner = new Scanner(System.in);
         this.repositorio = repositorio;
+        this.usuarioLogado = Optional.ofNullable(null);
     }
 
     private void mostrarCabecalho() {
@@ -16,8 +18,7 @@ public class Menu {
             "           ______\n" +
             "           /|_||_\\`.__\n" +
             "          (   _    _ _\\\n" +
-            "          =`-(_)--(_)-'\n\n" +
-            "     Luis - Marcos - Matheus\n"
+            "          =`-(_)--(_)-'\n\n"
         );
     }
 
@@ -31,7 +32,7 @@ public class Menu {
         scanner.nextLine();
     }
 
-    public Optional<Usuario> login() {
+    public void login() {
         limparTerminal();
         mostrarCabecalho();
         System.out.println("ENTRE NA SUA CONTA\n");
@@ -45,14 +46,22 @@ public class Menu {
             String senha = scanner.nextLine();
 
             if (usuario.get().validarSenha(senha)) {
-                return usuario;
+                this.usuarioLogado = usuario;
             } else {
                 mostrarErro("Senha incorreta.");
             }
         } else {
             mostrarErro("Login não existe.");
         }
+    }
 
-        return Optional.ofNullable(null);
+    public void mostrarInicio() {
+        limparTerminal();
+        mostrarCabecalho();
+        System.out.println(
+            "LOGADO COMO: " +
+            usuarioLogado.get().getNome() +
+            " (" + usuarioLogado.get().getTipoUsuario() + ")\n"
+        );
     }
 }
