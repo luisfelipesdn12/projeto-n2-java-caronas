@@ -14,4 +14,12 @@ public class Usuario {
         this.login = login;
         this.senha = senha;
     }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public boolean validarSenha(String senha) {
+        return this.senha.equals(senha);
+    }
 }
