@@ -9,6 +9,7 @@ import java.util.stream.Stream;
 public class Repositorio {
     private ArrayList<Motorista> motoristas;
     private ArrayList<Passageiro> passageiros;
+    private ArrayList<Viagem> viagens;
 
     public Repositorio() {
         this.motoristas = new ArrayList<Motorista>();

@@ -157,7 +157,11 @@ public class Menu {
                         "LOGADO COMO: " + usuarioLogado.get().getNome() +
                                 " (motorista)\n");
 
-                opcao = escolhaDeOpcao(new ArrayList<>(Arrays.asList("Cadastrar viagem", "Confirmar", "Sair")));
+                opcao = escolhaDeOpcao(new ArrayList<>(Arrays.asList(
+                    "Cadastrar viagem",
+                    "Confirmar",
+                    "Sair"
+                )));
                 break;
 
             case PASSAGEIRO:
@@ -165,7 +169,11 @@ public class Menu {
                 System.out.println(
                         "LOGADO COMO: " + usuarioLogado.get().getNome() +
                                 " (passageiro)\n");
-                opcao = escolhaDeOpcao(new ArrayList<>(Arrays.asList("Buscar carona", "Listar viagens", "Sair")));
+                opcao = escolhaDeOpcao(new ArrayList<>(Arrays.asList(
+                    "Buscar carona",
+                    "Listar viagens",
+                    "Sair"
+                )));
                 break;
 
             default:
