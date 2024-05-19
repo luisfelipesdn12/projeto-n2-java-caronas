@@ -11,6 +11,8 @@ public class Viagem {
      * desembarque de outros passageiros.
      */
     private ArrayList<Local> trajeto;
+    private ArrayList<Passageiro> passageiros;
+    private Avaliacao avaliacao;
     private Local partida;
     private Local destino;
 }

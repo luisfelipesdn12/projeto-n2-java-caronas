@@ -18,12 +18,11 @@ public class Menu {
 
     private void mostrarCabecalho() {
         System.out.println(
-            "\n CarONE-M: Viagens compartilhadas\n\n" +
-            "           ______\n" +
-            "           /|_||_\\`.__\n" +
-            "          (   _    _ _\\\n" +
-            "          =`-(_)--(_)-'\n\n"
-        );
+                "\n CarONE-M: Viagens compartilhadas\n\n" +
+                        "           ______\n" +
+                        "           /|_||_\\`.__\n" +
+                        "          (   _    _ _\\\n" +
+                        "          =`-(_)--(_)-'\n\n");
     }
 
     private void limparTerminal() {
@@ -36,13 +35,13 @@ public class Menu {
         scanner.nextLine();
     }
 
-    private int escolhaDeOpcao(ArrayList<String> opcoes) {        
+    private int escolhaDeOpcao(ArrayList<String> opcoes) {
         for (int i = 0; i < opcoes.size(); i++) {
             System.out.println((i + 1) + ". " + opcoes.get(i));
         }
 
         int opcao = 0;
-        
+
         while (!(opcao >= 1 && opcao <= opcoes.size())) {
             System.out.print("\nSELECIONE UMA OPÇÃO: ");
             opcao = scanner.nextInt();
@@ -115,12 +114,10 @@ public class Menu {
 
         if (tipoUsuario == TipoUsuario.MOTORISTA) {
             repositorio.incluirMotorista(
-                new Motorista(nome, endereco, email, telefone, login, senha)
-            );
+                    new Motorista(nome, endereco, email, telefone, login, senha));
         } else if (tipoUsuario == TipoUsuario.PASSAGEIRO) {
             repositorio.incluirPassageiro(
-                new Passageiro(nome, endereco, email, telefone, login, senha)
-            );
+                    new Passageiro(nome, endereco, email, telefone, login, senha));
         }
     }
 
@@ -151,27 +148,26 @@ public class Menu {
         limparTerminal();
         mostrarCabecalho();
 
+        int opcao;
+
         switch (usuarioLogado.get().getTipoUsuario()) {
             case MOTORISTA:
+                // TODO: Adicionar opções apenas de motorista
                 System.out.println(
-                    "LOGADO COMO: " + usuarioLogado.get().getNome() +
-                    " (motorista)\n\n" +
-                    "1) Cadastrar um novo usuário\n" +
-                    "2) Cadastrar uma viagem\n" +
-                    "3) Buscar por carona\n" +
-                    "4) Avaliar uma viagem\n" +
-                    "5) Sair\n" +
-                    "Selecione uma opção:"
-                );
+                        "LOGADO COMO: " + usuarioLogado.get().getNome() +
+                                " (motorista)\n");
+
+                opcao = escolhaDeOpcao(new ArrayList<>(Arrays.asList("Cadastrar viagem", "Confirmar", "Sair")));
                 break;
 
             case PASSAGEIRO:
+                // TODO: Adicionar opções apenas de passageiro
                 System.out.println(
-                    "LOGADO COMO: " + usuarioLogado.get().getNome() +
-                    " (passageiro)\n"
-                );
+                        "LOGADO COMO: " + usuarioLogado.get().getNome() +
+                                " (passageiro)\n");
+                opcao = escolhaDeOpcao(new ArrayList<>(Arrays.asList("Buscar carona", "Listar viagens", "Sair")));
                 break;
-        
+
             default:
                 break;
         }
