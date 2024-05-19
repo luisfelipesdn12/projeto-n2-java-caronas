@@ -5,11 +5,13 @@ import java.util.Scanner;
 
 public class Menu {
     Scanner scanner;
+    Validador validador;
     Repositorio repositorio;
     Optional<Usuario> usuarioLogado;
 
     public Menu(Repositorio repositorio) {
-        scanner = new Scanner(System.in);
+        this.scanner = new Scanner(System.in);
+        this.validador = new Validador();
         this.repositorio = repositorio;
         this.usuarioLogado = Optional.ofNullable(null);
     }
@@ -46,6 +48,7 @@ public class Menu {
             opcao = scanner.nextInt();
         }
 
+        scanner.nextLine();
         return opcao;
     }
 
@@ -65,6 +68,60 @@ public class Menu {
         limparTerminal();
         mostrarCabecalho();
         System.out.println("REGISTRE UMA NOVA CONTA\n");
+
+        int tipo = escolhaDeOpcao(new ArrayList<>(Arrays.asList("Passageiro", "Motorista")));
+
+        TipoUsuario tipoUsuario = tipo == 1 ? TipoUsuario.PASSAGEIRO : TipoUsuario.MOTORISTA;
+
+        String nome;
+        do {
+            System.out.print("Digite seu nome: ");
+            nome = scanner.nextLine();
+        } while (!validador.validarNome(nome));
+
+        String telefone;
+        do {
+            System.out.print("Digite seu telefone: ");
+            telefone = scanner.nextLine();
+        } while (!validador.validarTelefone(telefone));
+
+        String email;
+        do {
+            System.out.print("Digite seu email: ");
+            email = scanner.nextLine();
+        } while (!validador.validarEmail(email));
+
+        String endereco;
+        do {
+            System.out.print("Digite seu endereco: ");
+            endereco = scanner.nextLine();
+        } while (!validador.validarEndereco(endereco));
+
+        String login;
+        do {
+            System.out.print("Digite seu login: ");
+            login = scanner.nextLine();
+
+            if (repositorio.getUsuarioPeloLogin(login).isPresent()) {
+                login = "";
+            }
+        } while (!validador.validarLogin(login));
+
+        String senha;
+        do {
+            System.out.print("Digite seu senha: ");
+            senha = scanner.nextLine();
+        } while (!validador.validarSenha(senha));
+
+        if (tipoUsuario == TipoUsuario.MOTORISTA) {
+            repositorio.incluirMotorista(
+                new Motorista(nome, endereco, email, telefone, login, senha)
+            );
+        } else if (tipoUsuario == TipoUsuario.PASSAGEIRO) {
+            repositorio.incluirPassageiro(
+                new Passageiro(nome, endereco, email, telefone, login, senha)
+            );
+        }
     }
 
     public void login() {

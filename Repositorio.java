@@ -47,4 +47,12 @@ public class Repositorio {
             .filter(usuario -> usuario.getLogin().equals(login))
             .findFirst();
     }
+
+    public void incluirMotorista(Motorista motorista) {
+        motoristas.add(motorista);
+    }
+
+    public void incluirPassageiro(Passageiro passageiro) {
+        passageiros.add(passageiro);
+    }
 }

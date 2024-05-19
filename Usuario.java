@@ -28,7 +28,7 @@ public class Usuario {
     public boolean validarSenha(String senha) {
         return this.senha.equals(senha);
     }
-    
+
     public String getNome() {
         return nome;
     }
