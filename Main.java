@@ -4,7 +4,7 @@ public class Main {
         Menu menu = new Menu(repositorio);
 
         while (menu.usuarioLogado.isEmpty()) {
-            menu.login();
+            menu.mostrarInicio();
         }
 
         menu.mostrarInicioLogado();

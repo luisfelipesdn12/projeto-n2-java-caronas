@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -32,10 +34,37 @@ public class Menu {
         scanner.nextLine();
     }
 
+    private int escolhaDeOpcao(ArrayList<String> opcoes) {        
+        for (int i = 0; i < opcoes.size(); i++) {
+            System.out.println((i + 1) + ". " + opcoes.get(i));
+        }
+
+        int opcao = 0;
+        
+        while (!(opcao >= 1 && opcao <= opcoes.size())) {
+            System.out.print("\nSELECIONE UMA OPÇÃO: ");
+            opcao = scanner.nextInt();
+        }
+
+        return opcao;
+    }
+
     public void mostrarInicio() {
         limparTerminal();
         mostrarCabecalho();
-        System.out.println("SELECIONE UM \n");
+        int opcao = escolhaDeOpcao(new ArrayList<>(Arrays.asList("Login", "Registro")));
+
+        if (opcao == 1) {
+            login();
+        } else {
+            registro();
+        }
+    }
+
+    public void registro() {
+        limparTerminal();
+        mostrarCabecalho();
+        System.out.println("REGISTRE UMA NOVA CONTA\n");
     }
 
     public void login() {
