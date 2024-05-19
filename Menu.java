@@ -144,6 +144,62 @@ public class Menu {
         }
     }
 
+    public ArrayList<Local> cadastrarTrajeto(){
+        limparTerminal();
+        mostrarCabecalho();
+        ArrayList<Local> locais = new ArrayList<Local>();
+        System.out.print("Digite quantos pontos de locais o trajeto terá: ");
+        int quantidadeDeLocais = scanner.nextInt();
+        for (int i = 1; i <= quantidadeDeLocais; i++){
+            System.out.printf("Digite o ponto x do local %d: ", i);
+            int xLocal = scanner.nextInt();
+            System.out.printf("Digite o ponto y do local %d: ", i);
+            int yLocal = scanner.nextInt();
+            Local local = new Local(xLocal, yLocal);
+            locais.add(local);
+        }
+        return locais;
+    }
+
+    public void cadastrarViagem(){
+        limparTerminal();
+        mostrarCabecalho();
+        System.out.print("Digite o ponto x do local de partida: ");
+        int xPartida = scanner.nextInt();
+        System.out.print("Digite o ponto y do local de partida: ");
+        int yPartida = scanner.nextInt();
+        System.out.print("Digite o ponto x do local de destino: ");
+        int xDestino = scanner.nextInt();
+        System.out.print("Digite o ponto y do local de destino: ");
+        int yDestino = scanner.nextInt();
+        ArrayList<Local> trajeto = cadastrarTrajeto();
+        System.out.print("Digite a quantidade disponivel de lugares no veículo: ");
+        int lugares = scanner.nextInt();
+        Local partida = new Local(xPartida, yPartida);
+        Local destino = new Local(xDestino, yDestino);
+        Viagem viagem = new Viagem(partida, destino, trajeto, lugares);
+        repositorio.incluirViagem(viagem);
+        System.out.println("Viagem cadastrada com sucesso!");
+    }
+
+    public void listaViagens(){
+        int viagemAtual = 1;
+        for (Viagem viagem : repositorio.getTodasAsViagens()){
+            int parada = 1;
+            System.out.printf("========== Viagem %d ==========\n", viagemAtual);
+            System.out.printf("Local de partida: %s\n", viagem.getPartida().toString());
+            System.out.printf("Local de destino: %s\n", viagem.getDestino().toString());
+            for (Local local : viagem.getTrajeto()){
+                System.out.printf("Parada %d do trajeto: %s\n", parada, local.toString());
+                parada += 1;
+            }
+            System.out.printf("Lugares no carro: %d\n", viagem.getLugares());
+            System.out.println("==============================");
+            System.out.println("");
+            viagemAtual += 1;
+        }
+    }
+
     public void mostrarInicioLogado() {
         limparTerminal();
         mostrarCabecalho();
@@ -152,17 +208,26 @@ public class Menu {
 
         switch (usuarioLogado.get().getTipoUsuario()) {
             case MOTORISTA:
-                // TODO: Adicionar opções apenas de motorista
-                System.out.println(
-                        "LOGADO COMO: " + usuarioLogado.get().getNome() +
-                                " (motorista)\n");
+                boolean loopMenu = true;
+                while (loopMenu){
+                    // TODO: Adicionar opções apenas de motorista
+                    System.out.println(
+                            "LOGADO COMO: " + usuarioLogado.get().getNome() +
+                                    " (motorista)\n");
 
-                opcao = escolhaDeOpcao(new ArrayList<>(Arrays.asList(
-                    "Cadastrar viagem",
-                    "Confirmar",
-                    "Sair"
-                )));
-                break;
+                    opcao = escolhaDeOpcao(new ArrayList<>(Arrays.asList(
+                        "Cadastrar viagem",
+                        "Confirmar",
+                        "Sair"
+                    )));
+                    if (opcao == 1){
+                        cadastrarViagem();
+                    } else if (opcao == 2){
+                        System.out.println("Teste opcao 2");
+                    } else if (opcao == 3) {
+                        loopMenu = false;
+                    }
+                }
 
             case PASSAGEIRO:
                 // TODO: Adicionar opções apenas de passageiro
@@ -174,7 +239,14 @@ public class Menu {
                     "Listar viagens",
                     "Sair"
                 )));
-                break;
+                if (opcao == 1){
+                    System.out.println("Teste opcao 1");
+                } else if (opcao == 2 ){
+                    listaViagens();
+                } else if (opcao == 3) {
+                    System.out.println("Teste opcao 3");
+                    break;
+                }
 
             default:
                 break;

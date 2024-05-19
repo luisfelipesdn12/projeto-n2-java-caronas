@@ -18,7 +18,6 @@ public class Repositorio {
         this.motoristas.add(new Motorista("Felipe Costa", "Travessa da Amizade, 456", "felipe.costa@ig.com.br", "(54) 4567-8901", "felipecostabr", "senhadificil"));
         this.motoristas.add(new Motorista("Isabela Vargas", "Rua da Harmonia, 90", "isabela.vargas@yahoo.com.br", "(92) 2109-3456", "isabelavargas", "1q2w3e4r"));
         this.motoristas.add(new Motorista("Daniel Mendes", "Avenida Atlântica, 1000", "daniel.mendes@uol.com.br", "(13) 7890-1234", "danielmendes", "senhasegura2024"));
-        this.motoristas.add(new Motorista("Carlos Dias", "Rua XV de Novembro, 30", "carlos.dias@profissao.com.br", "(32) 2345-6789", "carlosdiasz", "supersecreto"));
 
         this.passageiros = new ArrayList<Passageiro>();
         this.passageiros.add(new Passageiro("Ana Silva", "Rua das Flores, 123", "ana.silva@email.com", "(11) 98765-4321", "anasilva", "123456"));
@@ -26,6 +25,8 @@ public class Repositorio {
         this.passageiros.add(new Passageiro("Maria Oliveira", "Praça da Liberdade, s/n", "maria.oliveira@gmail.com", "(41) 5432-1098", "mariazinha", "abc123"));
         this.passageiros.add(new Passageiro("João Souza", "Rua da Paz, 789", "joao.souza@hotmail.com", "(81) 9123-4567", "joaosouza123", "minha123$"));
         this.passageiros.add(new Passageiro("Beatriz Campos", "Avenida Brasil, 2000", "bia.campos@provedor.com", "(65) 6789-0123", "biazinha", "qwerty"));
+
+        this.viagens = new ArrayList<Viagem>();
     }
 
     public ArrayList<Usuario> getTodosOsUsuarios() {
@@ -42,6 +43,10 @@ public class Repositorio {
         return usuarios;
     }
 
+    public ArrayList<Viagem> getTodasAsViagens(){
+        return viagens;
+    }
+
     public Optional<Usuario> getUsuarioPeloLogin(String login) {
         return Stream.of(getTodosOsUsuarios())
             .flatMap(usuario -> usuario.stream())
@@ -55,5 +60,9 @@ public class Repositorio {
 
     public void incluirPassageiro(Passageiro passageiro) {
         passageiros.add(passageiro);
+    }
+
+    public void incluirViagem(Viagem viagem) {
+        viagens.add(viagem);
     }
 }
