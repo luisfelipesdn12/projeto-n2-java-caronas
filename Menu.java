@@ -32,6 +32,12 @@ public class Menu {
         scanner.nextLine();
     }
 
+    public void mostrarInicio() {
+        limparTerminal();
+        mostrarCabecalho();
+        System.out.println("SELECIONE UM \n");
+    }
+
     public void login() {
         limparTerminal();
         mostrarCabecalho();
@@ -55,13 +61,33 @@ public class Menu {
         }
     }
 
-    public void mostrarInicio() {
+    public void mostrarInicioLogado() {
         limparTerminal();
         mostrarCabecalho();
-        System.out.println(
-            "LOGADO COMO: " +
-            usuarioLogado.get().getNome() +
-            " (" + usuarioLogado.get().getTipoUsuario() + ")\n"
-        );
+
+        switch (usuarioLogado.get().getTipoUsuario()) {
+            case MOTORISTA:
+                System.out.println(
+                    "LOGADO COMO: " + usuarioLogado.get().getNome() +
+                    " (motorista)\n\n" +
+                    "1) Cadastrar um novo usuário\n" +
+                    "2) Cadastrar uma viagem\n" +
+                    "3) Buscar por carona\n" +
+                    "4) Avaliar uma viagem\n" +
+                    "5) Sair\n" +
+                    "Selecione uma opção:"
+                );
+                break;
+
+            case PASSAGEIRO:
+                System.out.println(
+                    "LOGADO COMO: " + usuarioLogado.get().getNome() +
+                    " (passageiro)\n"
+                );
+                break;
+        
+            default:
+                break;
+        }
     }
 }

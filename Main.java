@@ -7,6 +7,6 @@ public class Main {
             menu.login();
         }
 
-        menu.mostrarInicio();
+        menu.mostrarInicioLogado();
     }
 }
