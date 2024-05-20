@@ -276,6 +276,50 @@ public class Menu {
         }
     }
 
+    public void avaliarViagens() {
+        limparTerminal();
+        mostrarCabecalho();
+        // Listar todas as viagens do passageiro que não há avaliação dele.
+        ArrayList<Viagem> viagens = repositorio.getTodasAsViagensSemAvaliacao((Passageiro)usuarioLogado.get());
+        System.out.println("Viagens sem avaliação:");
+        listarViagens(viagens);
+
+        if (viagens.isEmpty()) {
+            System.out.println("Nenhuma viagem encontrada...");
+            System.out.println("Pressione qualquer tecla para prosseguir...\n");
+            scanner.nextLine();
+            return;
+        }
+
+        // Ao selecionar uma viagem
+        System.out.println("Selecione uma viagem:");
+        int opcViagem = escolhaDeOpcao(viagens, true);
+
+        // Se não for sair
+        if (opcViagem != viagens.size() + 1) {
+            Viagem viagem = viagens.get(opcViagem - 1);
+            System.out.println("Selecione uma nota:");
+            int nota = escolhaDeOpcao(new ArrayList<>(Arrays.asList(
+                "1", "2", "3", "4", "5"
+            )), true);
+
+            // Se não for sair
+            if (nota != 6) {
+                Avaliacao avaliacao = new Avaliacao(nota, (Passageiro)usuarioLogado.get());
+                int opcComentario = escolhaDeOpcao(new ArrayList<>(Arrays.asList("Adicionar comentário")), true);
+
+                // Se não for sair
+                if (opcComentario != 2) {
+                    System.out.printf("Digite o comentário: ");
+                    String comentario = scanner.nextLine();
+                    avaliacao.setComentario(comentario);
+                }
+
+                viagem.adicionarAvaliacao(avaliacao);
+            }
+        }
+    }
+
     public void listarViagensAnteriores() {
         ArrayList<Viagem> viagens = repositorio.getTodasAsViagens(usuarioLogado.get());
 
@@ -338,7 +382,8 @@ public class Menu {
                 opcao = escolhaDeOpcao(new ArrayList<>(Arrays.asList(
                     "Buscar carona",
                     "Listar suas viagens",
-                    "Listar suas solicitações"
+                    "Listar suas solicitações",
+                    "Avaliar viagem"
                 )), true);
                 if (opcao == 1) {
                     buscarCarona();
@@ -346,6 +391,8 @@ public class Menu {
                     listarViagensAnteriores();
                 } else if (opcao == 3) {
                     listarViagensSolicitadas();
+                } else if (opcao == 4) {
+                    avaliarViagens();
                 } else {
                     this.usuarioLogado = Optional.ofNullable(null);
                 }

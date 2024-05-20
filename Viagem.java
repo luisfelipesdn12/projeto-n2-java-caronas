@@ -14,7 +14,7 @@ public class Viagem {
     private Motorista motorista;
     private ArrayList<Passageiro> passageiros;
     private ArrayList<Passageiro> solicitacoes;
-    private Avaliacao avaliacao;
+    private ArrayList<Avaliacao> avaliacoes;
     private Local partida;
     private Local destino;
 
@@ -26,6 +26,7 @@ public class Viagem {
         this.motorista = motorista;
         passageiros = new ArrayList<Passageiro>();
         solicitacoes = new ArrayList<Passageiro>();
+        avaliacoes = new ArrayList<Avaliacao>();
     }
 
     public void solicitar(Passageiro passageiro){
@@ -91,6 +92,20 @@ public class Viagem {
 
     public int lugaresDisponiveis() {
         return lugares - passageiros.size();
+    }
+
+    public boolean temAvaliacaoDe(Passageiro passageiro) {
+        for (Avaliacao avaliacao : avaliacoes) {
+            if (avaliacao.getPassageiro().getLogin() == passageiro.getLogin()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public void adicionarAvaliacao(Avaliacao avaliacao) {
+        avaliacoes.add(avaliacao);
     }
 
     @Override

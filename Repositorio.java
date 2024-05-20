@@ -35,7 +35,8 @@ public class Repositorio {
             4,
             this.motoristas.get(2)
         ));
-        this.viagens.get(0).solicitar(this.passageiros.get(0));
+        this.viagens.get(0).embarque(this.passageiros.get(0));
+        this.viagens.get(0).solicitar(this.passageiros.get(1));
     }
 
     public ArrayList<Usuario> getTodosOsUsuarios() {
@@ -87,6 +88,19 @@ public class Repositorio {
         }
 
         return viagensComSolicitacao;
+    }
+
+    public ArrayList<Viagem> getTodasAsViagensSemAvaliacao(Passageiro passageiro) {
+        ArrayList<Viagem> viagens = new ArrayList<>();
+        ArrayList<Viagem> viagensDoPassageiro = getTodasAsViagens(passageiro);
+
+        for (Viagem viagem : viagensDoPassageiro) {
+            if (!viagem.temAvaliacaoDe(passageiro)) {
+                viagens.add(viagem);
+            }
+        }
+
+        return viagens;
     }
 
     public ArrayList<Viagem> getTodasAsSolicitacoesDoPassageiro(Usuario passageiro) {
