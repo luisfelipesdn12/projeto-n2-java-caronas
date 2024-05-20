@@ -1,14 +1,14 @@
 
 public class Usuario {
     private String nome;
-    private String endereco;
+    private Local endereco;
     private String email;
     private String telefone;
     private String login;
     private String senha;
     protected TipoUsuario tipoUsuario;
 
-    public Usuario(String nome, String endereco, String email, String telefone, String login, String senha) {
+    public Usuario(String nome, Local endereco, String email, String telefone, String login, String senha) {
         this.nome = nome;
         this.endereco = endereco;
         this.email = email;
@@ -31,6 +31,10 @@ public class Usuario {
 
     public String getNome() {
         return nome;
+    }
+
+    public Local getEndereco() {
+        return endereco;
     }
 
     @Override

@@ -98,11 +98,12 @@ public class Menu {
             email = scanner.nextLine();
         } while (!validador.validarEmail(email));
 
-        String endereco;
-        do {
-            System.out.print("Digite seu endereco: ");
-            endereco = scanner.nextLine();
-        } while (!validador.validarEndereco(endereco));
+        System.out.print("Digite seu endereco: ");
+        System.out.print("Digite o ponto x: ");
+        int x = scanner.nextInt();
+        System.out.print("Digite o ponto y: ");
+        int y = scanner.nextInt();
+        Local endereco = new Local(x, y);
 
         String login;
         do {
@@ -193,19 +194,14 @@ public class Menu {
     public void buscarCarona() {
         limparTerminal();
         mostrarCabecalho();
-        System.out.print("Digite o ponto x do local de partida: ");
-        int xPartida = scanner.nextInt();
-        System.out.print("Digite o ponto y do local de partida: ");
-        int yPartida = scanner.nextInt();
         System.out.print("Digite o ponto x do local de destino: ");
         int xDestino = scanner.nextInt();
         System.out.print("Digite o ponto y do local de destino: ");
         int yDestino = scanner.nextInt();
-        
-        Local partida = new Local(xPartida, yPartida);
+
         Local destino = new Local(xDestino, yDestino);
 
-        ArrayList<Viagem> viagensCompativeis = repositorio.getTodasAsViagensCompativeis(partida, destino);
+        ArrayList<Viagem> viagensCompativeis = repositorio.getTodasAsViagensCompativeis(usuarioLogado.get().getEndereco(), destino);
 
         if (viagensCompativeis.isEmpty()) {
             System.out.println("Nenhuma viagem encontrada...");

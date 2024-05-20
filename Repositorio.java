@@ -14,19 +14,19 @@ public class Repositorio {
 
     public Repositorio() {
         this.motoristas = new ArrayList<Motorista>();
-        this.motoristas.add(new Motorista("Carlos Dias", "Rua XV de Novembro, 30", "carlos.dias@profissao.com.br", "(32) 2345-6789", "carlosdiasz", "supersecreto"));
-        this.motoristas.add(new Motorista("Gabriela Pereira", "Beco do Sossego, 1", "gabriela.pereira@outlook.com", "(71) 8901-2345", "gabipereira", "mudar123!"));
-        this.motoristas.add(new Motorista("Felipe Costa", "Travessa da Amizade, 456", "felipe.costa@ig.com.br", "(54) 4567-8901", "felipecostabr", "senhadificil"));
-        this.motoristas.add(new Motorista("Isabela Vargas", "Rua da Harmonia, 90", "isabela.vargas@yahoo.com.br", "(92) 2109-3456", "isabelavargas", "1q2w3e4r"));
-        this.motoristas.add(new Motorista("Daniel Mendes", "Avenida Atlântica, 1000", "daniel.mendes@uol.com.br", "(13) 7890-1234", "danielmendes", "senhasegura2024"));
+        this.motoristas.add(new Motorista("Carlos Dias", new Local(2, 5), "carlos.dias@profissao.com.br", "(32) 2345-6789", "carlosdiasz", "supersecreto"));
+        this.motoristas.add(new Motorista("Gabriela Pereira", new Local(-3, 8), "gabriela.pereira@outlook.com", "(71) 8901-2345", "gabipereira", "mudar123!"));
+        this.motoristas.add(new Motorista("Felipe Costa", new Local(6, -1), "felipe.costa@ig.com.br", "(54) 4567-8901", "felipecostabr", "senhadificil"));
+        this.motoristas.add(new Motorista("Isabela Vargas", new Local(-7, 4), "isabela.vargas@yahoo.com.br", "(92) 2109-3456", "isabelavargas", "1q2w3e4r"));
+        this.motoristas.add(new Motorista("Daniel Mendes", new Local(9, -6), "daniel.mendes@uol.com.br", "(13) 7890-1234", "danielmendes", "senhasegura2024"));
 
         this.passageiros = new ArrayList<Passageiro>();
-        this.passageiros.add(new Passageiro("Ana Silva", "Rua das Flores, 123", "ana.silva@email.com", "(11) 98765-4321", "anasilva", "123456"));
-        this.passageiros.add(new Passageiro("Pedro Santos", "Avenida Paulista, 500", "pedro.santos@empresa.com.br", "(21) 3210-9876", "pedrosantos", "senhaforte"));
-        this.passageiros.add(new Passageiro("Maria Oliveira", "Praça da Liberdade, s/n", "maria.oliveira@gmail.com", "(41) 5432-1098", "mariazinha", "abc123"));
-        this.passageiros.add(new Passageiro("João Souza", "Rua da Paz, 789", "joao.souza@hotmail.com", "(81) 9123-4567", "joaosouza123", "minha123$"));
-        this.passageiros.add(new Passageiro("Beatriz Campos", "Avenida Brasil, 2000", "bia.campos@provedor.com", "(65) 6789-0123", "biazinha", "qwerty"));
-
+        this.passageiros.add(new Passageiro("Ana Silva", new Local(1, 2), "ana.silva@email.com", "(11) 98765-4321", "anasilva", "123456"));
+        this.passageiros.add(new Passageiro("Pedro Santos", new Local(5, -8), "pedro.santos@empresa.com.br", "(21) 3210-9876", "pedrosantos", "senhaforte"));
+        this.passageiros.add(new Passageiro("Maria Oliveira", new Local(-6, 7), "maria.oliveira@gmail.com", "(41) 5432-1098", "mariazinha", "abc123"));
+        this.passageiros.add(new Passageiro("João Souza", new Local(4, -3), "joao.souza@hotmail.com", "(81) 9123-4567", "joaosouza123", "minha123$"));
+        this.passageiros.add(new Passageiro("Beatriz Campos", new Local(-9, 1), "bia.campos@provedor.com", "(65) 6789-0123", "biazinha", "qwerty"));
+                
         this.viagens = new ArrayList<Viagem>();
         this.viagens.add(new Viagem(
             new Local(-2, -2),
