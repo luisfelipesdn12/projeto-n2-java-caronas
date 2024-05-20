@@ -35,6 +35,7 @@ public class Repositorio {
             4,
             this.motoristas.get(2)
         ));
+        this.viagens.get(0).solicitar(this.passageiros.get(0));
     }
 
     public ArrayList<Usuario> getTodosOsUsuarios() {
@@ -51,22 +52,59 @@ public class Repositorio {
         return usuarios;
     }
 
-    public ArrayList<Viagem> getTodasAsViagensDoPassageiro(Usuario passageiro) {
-        ArrayList<Viagem> viagensAnteriores = new ArrayList<>();
+    public ArrayList<Viagem> getTodasAsViagens(Usuario usuario) {
+        ArrayList<Viagem> viagens = new ArrayList<>();
 
         // Para cada viagem
         for (Viagem viagem : this.viagens) {
-            // Pegue todos os passageiros
-            for (Passageiro p : viagem.getPassageiros()) {
-                // Se o passageiro procurado estiver incluido
-                if (p.getLogin() == passageiro.getLogin()) {
-                    // Adciona na lista
-                    viagensAnteriores.add(viagem);
+            if (usuario.tipoUsuario == TipoUsuario.PASSAGEIRO) {
+                // Pegue todos os passageiros
+                for (Passageiro p : viagem.getPassageiros()) {
+                    // Se o passageiro procurado estiver incluido
+                    if (p.getLogin() == usuario.getLogin()) {
+                        // Adciona na lista
+                        viagens.add(viagem);
+                    }
+                }
+            } else if (usuario.tipoUsuario == TipoUsuario.MOTORISTA) {
+                if (viagem.getMotorista().getLogin() == usuario.getLogin()) {
+                    viagens.add(viagem);
                 }
             }
         }
 
-        return viagensAnteriores;
+        return viagens;
+    }
+
+    public ArrayList<Viagem> getTodasAsViagensComSolicitacao(Motorista motorista) {
+        ArrayList<Viagem> viagensComSolicitacao = new ArrayList<>();
+        ArrayList<Viagem> viagensDoMotorista = getTodasAsViagens(motorista);
+
+        for (Viagem viagem : viagensDoMotorista) {
+            if (viagem.getSolicitacoes().size() > 0) {
+                viagensComSolicitacao.add(viagem);
+            }
+        }
+
+        return viagensComSolicitacao;
+    }
+
+    public ArrayList<Viagem> getTodasAsSolicitacoesDoPassageiro(Usuario passageiro) {
+        ArrayList<Viagem> viagensSolicitadas = new ArrayList<>();
+
+        // Para cada viagem
+        for (Viagem viagem : this.viagens) {
+            // Pegue todos os passageiros
+            for (Passageiro p : viagem.getSolicitacoes()) {
+                // Se o passageiro procurado estiver incluido
+                if (p.getLogin() == passageiro.getLogin()) {
+                    // Adciona na lista
+                    viagensSolicitadas.add(viagem);
+                }
+            }
+        }
+
+        return viagensSolicitadas;
     }
 
     public ArrayList<Viagem> getTodasAsViagensCompativeis(Local partida, Local destino) {

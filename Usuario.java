@@ -32,4 +32,12 @@ public class Usuario {
     public String getNome() {
         return nome;
     }
+
+    @Override
+    public String toString() {
+        return (tipoUsuario == TipoUsuario.MOTORISTA ? "Motorista: " : "Passageiro: ") +
+            nome + " - " +
+            email + " - " +
+            telefone;
+    }
 }

@@ -215,9 +215,8 @@ public class Menu {
 
             // Se a opção não for sair
             if (viagemEscolhida != viagensCompativeis.size() + 1) {
-                viagensCompativeis.get(viagemEscolhida - 1).embarque((Passageiro)usuarioLogado.get());
+                viagensCompativeis.get(viagemEscolhida - 1).solicitar((Passageiro)usuarioLogado.get());
             }
-
         }
     }
 
@@ -239,16 +238,66 @@ public class Menu {
             viagemAtual += 1;
         }
     }
+    
+    public void confirmarSolicitacoes() {
+        limparTerminal();
+        mostrarCabecalho();
+        // Listar todas as viagens com solicitação
+        ArrayList<Viagem> viagens = repositorio.getTodasAsViagensComSolicitacao((Motorista)usuarioLogado.get());
+        System.out.println("Viagens com solicitação de passageiros:");
+        listarViagens(viagens);
+        
+        // Ao selecionar uma viagem
+        System.out.println("Selecione uma viagem:");
+        int opcViagem = escolhaDeOpcao(viagens, true);
+
+        // Se não for sair
+        if (opcViagem != viagens.size() + 1) {
+            Viagem viagem = viagens.get(opcViagem - 1);
+            // Listar todas as solicitações (passageiros)
+            int opcPassageiro = escolhaDeOpcao(viagem.getSolicitacoes(), true);
+
+            // Se não for sair
+            if (opcPassageiro != viagem.getSolicitacoes().size() + 1) {
+                Passageiro passageiro = viagem.getSolicitacoes().get(opcPassageiro - 1);
+
+                // Ao selecionar uma soliciatação, selecionar aprovado ou negado.
+                int opcAprovacao = escolhaDeOpcao(new ArrayList<>(Arrays.asList(
+                    "Aceitar",
+                    "Negar"
+                )), true);
+
+                if (opcAprovacao == 1) {
+                    viagem.aprovar(passageiro);
+                } else if (opcAprovacao == 2) {
+                    viagem.negar(passageiro);
+                }
+            }
+        }
+    }
 
     public void listarViagensAnteriores() {
-        ArrayList<Viagem> viagensAnteriores = repositorio.getTodasAsViagensDoPassageiro(usuarioLogado.get());
+        ArrayList<Viagem> viagens = repositorio.getTodasAsViagens(usuarioLogado.get());
 
-        if (viagensAnteriores.isEmpty()) {
+        if (viagens.isEmpty()) {
             System.out.println("Nenhuma viagem encontrada...");
         } else {
-            listarViagens(viagensAnteriores);
+            listarViagens(viagens);
         }
         
+        System.out.println("Pressione qualquer tecla para prosseguir...\n");
+        scanner.nextLine();
+    }
+
+    public void listarViagensSolicitadas() {
+        ArrayList<Viagem> viagensSolicitadas = repositorio.getTodasAsSolicitacoesDoPassageiro(usuarioLogado.get());
+
+        if (viagensSolicitadas.isEmpty()) {
+            System.out.println("Nenhuma viagem encontrada...");
+        } else {
+            listarViagens(viagensSolicitadas);
+        }
+
         System.out.println("Pressione qualquer tecla para prosseguir...\n");
         scanner.nextLine();
     }
@@ -268,13 +317,16 @@ public class Menu {
 
                 opcao = escolhaDeOpcao(new ArrayList<>(Arrays.asList(
                     "Cadastrar viagem",
-                    "Confirmar"
+                    "Listar suas viagens",
+                    "Confirmar solicitações de passageiros"
                 )), true);
                 if (opcao == 1){
                     cadastrarViagem();
-                } else if (opcao == 2){
-                    System.out.println("Teste opcao 2");
+                } else if (opcao == 2) {
+                    listarViagensAnteriores();
                 } else if (opcao == 3) {
+                    confirmarSolicitacoes();
+                } else {
                     this.usuarioLogado = Optional.ofNullable(null);
                 }
 
@@ -285,13 +337,16 @@ public class Menu {
                                 " (passageiro)\n");
                 opcao = escolhaDeOpcao(new ArrayList<>(Arrays.asList(
                     "Buscar carona",
-                    "Listar viagens anteriores"
+                    "Listar suas viagens",
+                    "Listar suas solicitações"
                 )), true);
-                if (opcao == 1){
+                if (opcao == 1) {
                     buscarCarona();
-                } else if (opcao == 2 ){
+                } else if (opcao == 2 ) {
                     listarViagensAnteriores();
                 } else if (opcao == 3) {
+                    listarViagensSolicitadas();
+                } else {
                     this.usuarioLogado = Optional.ofNullable(null);
                 }
 

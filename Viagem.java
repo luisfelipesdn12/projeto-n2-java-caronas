@@ -13,6 +13,7 @@ public class Viagem {
     private ArrayList<Local> trajeto;
     private Motorista motorista;
     private ArrayList<Passageiro> passageiros;
+    private ArrayList<Passageiro> solicitacoes;
     private Avaliacao avaliacao;
     private Local partida;
     private Local destino;
@@ -24,6 +25,20 @@ public class Viagem {
         this.lugares = lugares;
         this.motorista = motorista;
         passageiros = new ArrayList<Passageiro>();
+        solicitacoes = new ArrayList<Passageiro>();
+    }
+
+    public void solicitar(Passageiro passageiro){
+        solicitacoes.add(passageiro);
+    }
+
+    public void negar(Passageiro passageiro){
+        solicitacoes.remove(passageiro);
+    }
+
+    public void aprovar(Passageiro passageiro){
+        solicitacoes.remove(passageiro);
+        passageiros.add(passageiro);
     }
 
     public void embarque(Passageiro passageiro){
@@ -57,9 +72,17 @@ public class Viagem {
     public int getLugares(){
         return lugares;
     }
+
+    public Motorista getMotorista() {
+        return motorista;
+    }
     
     public ArrayList<Passageiro> getPassageiros() {
         return passageiros;
+    }
+
+    public ArrayList<Passageiro> getSolicitacoes() {
+        return solicitacoes;
     }
 
     public boolean temLugaresDisponiveis() {
@@ -72,6 +95,6 @@ public class Viagem {
 
     @Override
     public String toString() {
-        return "Viagem de (" + partida.toString() + ") para (" + destino.toString() + ") com " + lugaresDisponiveis() + " lugares disponíveis.";
+        return "Viagem de (" + partida.toString() + ") para (" + destino.toString() + ") com " + lugaresDisponiveis() + " lugares disponíveis e " + solicitacoes.size() + (solicitacoes.size() == 1 ? " solicitação." : " solicitações.") ;
     }
 }
