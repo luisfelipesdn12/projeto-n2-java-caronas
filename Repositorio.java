@@ -52,21 +52,21 @@ public class Repositorio {
     }
 
     public ArrayList<Viagem> getTodasAsViagensDoPassageiro(Usuario passageiro) {
-        ArrayList<Viagem> viagens = new ArrayList<>();
+        ArrayList<Viagem> viagensAnteriores = new ArrayList<>();
 
         // Para cada viagem
-        for (Viagem viagem : viagens) {
+        for (Viagem viagem : this.viagens) {
             // Pegue todos os passageiros
             for (Passageiro p : viagem.getPassageiros()) {
                 // Se o passageiro procurado estiver incluido
                 if (p.getLogin() == passageiro.getLogin()) {
                     // Adciona na lista
-                    viagens.add(viagem);
+                    viagensAnteriores.add(viagem);
                 }
             }
         }
 
-        return viagens;
+        return viagensAnteriores;
     }
 
     public ArrayList<Viagem> getTodasAsViagensCompativeis(Local partida, Local destino) {

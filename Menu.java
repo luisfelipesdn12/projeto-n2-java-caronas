@@ -8,14 +8,14 @@ public class Menu {
     Validador validador;
     Repositorio repositorio;
     Optional<Usuario> usuarioLogado;
+    boolean estaRodando;
 
     public Menu(Repositorio repositorio) {
         this.scanner = new Scanner(System.in);
         this.validador = new Validador();
         this.repositorio = repositorio;
+        this.estaRodando = true;
         this.usuarioLogado = Optional.ofNullable(null);
-
-        this.usuarioLogado  = Optional.of(new Passageiro("Ana Silva", "Rua das Flores, 123", "ana.silva@email.com", "(11) 98765-4321", "anasilva", "123456"));
     }
 
     private void mostrarCabecalho() {
@@ -37,14 +37,18 @@ public class Menu {
         scanner.nextLine();
     }
 
-    private int escolhaDeOpcao(ArrayList<? extends Object> opcoes) {
+    private int escolhaDeOpcao(ArrayList<? extends Object> opcoes, boolean opcaoSair) {
         for (int i = 0; i < opcoes.size(); i++) {
             System.out.println((i + 1) + ". " + opcoes.get(i).toString());
         }
 
+        if (opcaoSair) {
+            System.out.println((opcoes.size() + 1) + ". Sair");
+        }
+
         int opcao = 0;
 
-        while (!(opcao >= 1 && opcao <= opcoes.size())) {
+        while (!(opcao >= 1 && (opcaoSair ? opcao <= opcoes.size() + 1 : opcao <= opcoes.size()))) {
             System.out.print("\nSELECIONE UMA OPÇÃO: ");
             opcao = scanner.nextInt();
         }
@@ -56,12 +60,14 @@ public class Menu {
     public void mostrarInicio() {
         limparTerminal();
         mostrarCabecalho();
-        int opcao = escolhaDeOpcao(new ArrayList<>(Arrays.asList("Login", "Registro")));
+        int opcao = escolhaDeOpcao(new ArrayList<>(Arrays.asList("Login", "Registro")), true);
 
         if (opcao == 1) {
             login();
-        } else {
+        } else if (opcao == 2) {
             registro();
+        } else {
+            this.estaRodando = false;
         }
     }
 
@@ -70,7 +76,7 @@ public class Menu {
         mostrarCabecalho();
         System.out.println("REGISTRE UMA NOVA CONTA\n");
 
-        int tipo = escolhaDeOpcao(new ArrayList<>(Arrays.asList("Passageiro", "Motorista")));
+        int tipo = escolhaDeOpcao(new ArrayList<>(Arrays.asList("Passageiro", "Motorista")), false);
 
         TipoUsuario tipoUsuario = tipo == 1 ? TipoUsuario.PASSAGEIRO : TipoUsuario.MOTORISTA;
 
@@ -205,8 +211,13 @@ public class Menu {
             System.out.println("Nenhuma viagem encontrada...");
         } else {
             listarViagens(viagensCompativeis);
-            int viagemEscolhida = escolhaDeOpcao(viagensCompativeis);
-            viagensCompativeis.get(viagemEscolhida - 1).embarque((Passageiro)usuarioLogado.get());
+            int viagemEscolhida = escolhaDeOpcao(viagensCompativeis, true);
+
+            // Se a opção não for sair
+            if (viagemEscolhida != viagensCompativeis.size() + 1) {
+                viagensCompativeis.get(viagemEscolhida - 1).embarque((Passageiro)usuarioLogado.get());
+            }
+
         }
     }
 
@@ -230,8 +241,16 @@ public class Menu {
     }
 
     public void listarViagensAnteriores() {
-        ArrayList<Viagem> viagens = repositorio.getTodasAsViagensDoPassageiro(usuarioLogado.get());
-        listarViagens(viagens);
+        ArrayList<Viagem> viagensAnteriores = repositorio.getTodasAsViagensDoPassageiro(usuarioLogado.get());
+
+        if (viagensAnteriores.isEmpty()) {
+            System.out.println("Nenhuma viagem encontrada...");
+        } else {
+            listarViagens(viagensAnteriores);
+        }
+        
+        System.out.println("Pressione qualquer tecla para prosseguir...\n");
+        scanner.nextLine();
     }
 
     public void mostrarInicioLogado() {
@@ -242,25 +261,21 @@ public class Menu {
 
         switch (usuarioLogado.get().getTipoUsuario()) {
             case MOTORISTA:
-                boolean loopMenu = true;
-                while (loopMenu){
-                    // TODO: Adicionar opções apenas de motorista
-                    System.out.println(
-                            "LOGADO COMO: " + usuarioLogado.get().getNome() +
-                                    " (motorista)\n");
+                // TODO: Adicionar opções apenas de motorista
+                System.out.println(
+                        "LOGADO COMO: " + usuarioLogado.get().getNome() +
+                                " (motorista)\n");
 
-                    opcao = escolhaDeOpcao(new ArrayList<>(Arrays.asList(
-                        "Cadastrar viagem",
-                        "Confirmar",
-                        "Sair"
-                    )));
-                    if (opcao == 1){
-                        cadastrarViagem();
-                    } else if (opcao == 2){
-                        System.out.println("Teste opcao 2");
-                    } else if (opcao == 3) {
-                        loopMenu = false;
-                    }
+                opcao = escolhaDeOpcao(new ArrayList<>(Arrays.asList(
+                    "Cadastrar viagem",
+                    "Confirmar"
+                )), true);
+                if (opcao == 1){
+                    cadastrarViagem();
+                } else if (opcao == 2){
+                    System.out.println("Teste opcao 2");
+                } else if (opcao == 3) {
+                    this.usuarioLogado = Optional.ofNullable(null);
                 }
 
             case PASSAGEIRO:
@@ -270,16 +285,14 @@ public class Menu {
                                 " (passageiro)\n");
                 opcao = escolhaDeOpcao(new ArrayList<>(Arrays.asList(
                     "Buscar carona",
-                    "Listar viagens anteriores",
-                    "Sair"
-                )));
+                    "Listar viagens anteriores"
+                )), true);
                 if (opcao == 1){
                     buscarCarona();
                 } else if (opcao == 2 ){
                     listarViagensAnteriores();
                 } else if (opcao == 3) {
-                    System.out.println("Teste opcao 3");
-                    break;
+                    this.usuarioLogado = Optional.ofNullable(null);
                 }
 
             default:
