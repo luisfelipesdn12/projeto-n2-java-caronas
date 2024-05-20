@@ -37,6 +37,7 @@ public class Repositorio {
         ));
         this.viagens.get(0).embarque(this.passageiros.get(0));
         this.viagens.get(0).solicitar(this.passageiros.get(1));
+        this.viagens.get(0).adicionarAvaliacao(new Avaliacao(4, this.passageiros.get(0)));
     }
 
     public ArrayList<Usuario> getTodosOsUsuarios() {
@@ -101,6 +102,30 @@ public class Repositorio {
         }
 
         return viagens;
+    }
+
+    public ArrayList<Avaliacao> getTodasAsAvaliacoes(Usuario usuario) {
+        ArrayList<Avaliacao> avaliacoes = new ArrayList<>();
+        ArrayList<Viagem> viagensDoUsuario = getTodasAsViagens(usuario);
+
+        for (Viagem viagem : viagensDoUsuario) {
+            if (usuario.tipoUsuario == TipoUsuario.PASSAGEIRO) {
+                if (viagem.temAvaliacaoDe((Passageiro)usuario)) {
+                    for (Avaliacao avaliacao : viagem.getAvaliacoes()) {
+                        if (avaliacao.getPassageiro().getLogin() == usuario.getLogin()) {
+                            avaliacoes.add(avaliacao);
+                            break;
+                        }
+                    }
+                }
+            } else if (usuario.tipoUsuario == TipoUsuario.MOTORISTA) {
+                for (Avaliacao avaliacao : viagem.getAvaliacoes()) {
+                    avaliacoes.add(avaliacao);
+                }
+            }
+        }
+
+        return avaliacoes;
     }
 
     public ArrayList<Viagem> getTodasAsSolicitacoesDoPassageiro(Usuario passageiro) {

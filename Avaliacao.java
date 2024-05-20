@@ -1,5 +1,6 @@
 public class Avaliacao {
     private int nota;
+
     private String comentario;
 
     private Passageiro passageiro;
@@ -16,9 +17,13 @@ public class Avaliacao {
     public Passageiro getPassageiro() {
         return passageiro;
     }
+    
+    public int getNota() {
+        return nota;
+    }
 
     @Override
     public String toString() {
-        return "(" + nota + " estrelas) - " + comentario + " - " + passageiro.toString();
+        return "(" + nota + " estrelas) - " + (comentario == null ? "Sem comentário" : comentario) + " - " + passageiro.toString();
     }
 }

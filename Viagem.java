@@ -86,6 +86,10 @@ public class Viagem {
         return solicitacoes;
     }
 
+    public ArrayList<Avaliacao> getAvaliacoes() {
+        return avaliacoes;
+    }
+
     public boolean temLugaresDisponiveis() {
         return passageiros.size() < lugares;
     }

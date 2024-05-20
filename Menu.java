@@ -320,6 +320,32 @@ public class Menu {
         }
     }
 
+    public void visualizarAvaliacoes() {
+        limparTerminal();
+        mostrarCabecalho();
+        ArrayList<Avaliacao> avaliacoes = repositorio.getTodasAsAvaliacoes(usuarioLogado.get());
+
+        if (usuarioLogado.get().getTipoUsuario() == TipoUsuario.MOTORISTA) {
+            double soma = 0;
+
+            for (Avaliacao avaliacao : avaliacoes) {
+                soma += avaliacao.getNota();
+            }
+
+            double media = soma / avaliacoes.size();
+
+            System.out.printf("Média de nota: %.2f/5\n", media);
+        }
+
+        for (int i = 0; i < avaliacoes.size(); i++) {
+            System.out.printf("%d. ", i + 1);
+            System.out.println(avaliacoes.get(i));
+        }
+
+        System.out.println("Pressione qualquer tecla para prosseguir...\n");
+        scanner.nextLine();
+    }
+
     public void listarViagensAnteriores() {
         ArrayList<Viagem> viagens = repositorio.getTodasAsViagens(usuarioLogado.get());
 
@@ -328,7 +354,7 @@ public class Menu {
         } else {
             listarViagens(viagens);
         }
-        
+
         System.out.println("Pressione qualquer tecla para prosseguir...\n");
         scanner.nextLine();
     }
@@ -350,11 +376,12 @@ public class Menu {
         limparTerminal();
         mostrarCabecalho();
 
+        if (usuarioLogado.isEmpty()) return;
+
         int opcao;
 
         switch (usuarioLogado.get().getTipoUsuario()) {
             case MOTORISTA:
-                // TODO: Adicionar opções apenas de motorista
                 System.out.println(
                         "LOGADO COMO: " + usuarioLogado.get().getNome() +
                                 " (motorista)\n");
@@ -362,20 +389,23 @@ public class Menu {
                 opcao = escolhaDeOpcao(new ArrayList<>(Arrays.asList(
                     "Cadastrar viagem",
                     "Listar suas viagens",
-                    "Confirmar solicitações de passageiros"
+                    "Confirmar solicitações de passageiros",
+                    "Visualizar suas avaliações"
                 )), true);
-                if (opcao == 1){
+                if (opcao == 1) {
                     cadastrarViagem();
                 } else if (opcao == 2) {
                     listarViagensAnteriores();
                 } else if (opcao == 3) {
                     confirmarSolicitacoes();
+                } else if (opcao == 4) {
+                    visualizarAvaliacoes();
                 } else {
                     this.usuarioLogado = Optional.ofNullable(null);
+                    return;
                 }
 
             case PASSAGEIRO:
-                // TODO: Adicionar opções apenas de passageiro
                 System.out.println(
                         "LOGADO COMO: " + usuarioLogado.get().getNome() +
                                 " (passageiro)\n");
@@ -383,7 +413,8 @@ public class Menu {
                     "Buscar carona",
                     "Listar suas viagens",
                     "Listar suas solicitações",
-                    "Avaliar viagem"
+                    "Avaliar viagem",
+                    "Visualizar suas avaliações"
                 )), true);
                 if (opcao == 1) {
                     buscarCarona();
@@ -393,8 +424,11 @@ public class Menu {
                     listarViagensSolicitadas();
                 } else if (opcao == 4) {
                     avaliarViagens();
+                } else if (opcao == 5) {
+                    visualizarAvaliacoes();
                 } else {
                     this.usuarioLogado = Optional.ofNullable(null);
+                    return;
                 }
 
             default:
