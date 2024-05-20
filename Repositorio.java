@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -27,6 +28,13 @@ public class Repositorio {
         this.passageiros.add(new Passageiro("Beatriz Campos", "Avenida Brasil, 2000", "bia.campos@provedor.com", "(65) 6789-0123", "biazinha", "qwerty"));
 
         this.viagens = new ArrayList<Viagem>();
+        this.viagens.add(new Viagem(
+            new Local(-2, -2),
+            new Local(8, 8),
+            new ArrayList<Local>(Arrays.asList(new Local(0, 2), new Local(4, 4))),
+            4,
+            this.motoristas.get(2)
+        ));
     }
 
     public ArrayList<Usuario> getTodosOsUsuarios() {
@@ -43,8 +51,75 @@ public class Repositorio {
         return usuarios;
     }
 
-    public ArrayList<Viagem> getTodasAsViagens(){
+    public ArrayList<Viagem> getTodasAsViagensDoPassageiro(Usuario passageiro) {
+        ArrayList<Viagem> viagens = new ArrayList<>();
+
+        // Para cada viagem
+        for (Viagem viagem : viagens) {
+            // Pegue todos os passageiros
+            for (Passageiro p : viagem.getPassageiros()) {
+                // Se o passageiro procurado estiver incluido
+                if (p.getLogin() == passageiro.getLogin()) {
+                    // Adciona na lista
+                    viagens.add(viagem);
+                }
+            }
+        }
+
         return viagens;
+    }
+
+    public ArrayList<Viagem> getTodasAsViagensCompativeis(Local partida, Local destino) {
+        ArrayList<Viagem> viagensCompativeis = new ArrayList<>();
+
+        // Para cada viagem
+        for (Viagem viagem : this.viagens) {
+            /**
+             * Tem qualquer ponto perto da partida
+             */
+            boolean pertoDaPartida = false;
+            /**
+             * Tem qualquer ponto perto do destino
+             */
+            boolean pertoDoDestino = false;
+
+            /**
+             * Todos os pontos da viagem, incluindo partida, trajeto e destino.
+             */
+            ArrayList<Local> locaisViagemCompleta  = new ArrayList<>();
+
+            // Adiciona partida
+            locaisViagemCompleta.add(viagem.getPartida());
+
+            // Adiciona cada ponto to trajeto
+            for (Local local : viagem.getTrajeto()) {
+                locaisViagemCompleta.add(local);
+            }
+
+            // Adiciona destino
+            locaisViagemCompleta.add(viagem.getDestino());
+
+            // Pegue todos os locais da viagem
+            for (Local local : locaisViagemCompleta) {
+                // Verifique se o local é perto da partida
+                if (local.ePerto(partida)) {
+                    pertoDaPartida = true;
+                }
+
+                // Verifique se o local é perto do destino
+                if (local.ePerto(destino)) {
+                    pertoDoDestino = true;
+                }
+            }
+
+            // Se a viagem tem locais que são perto da partida
+            // e do destino e tem lugares adicione nas viagens.
+            if (pertoDaPartida && pertoDoDestino && viagem.temLugaresDisponiveis()) {
+                viagensCompativeis.add(viagem);
+            }
+        }
+
+        return viagensCompativeis;
     }
 
     public Optional<Usuario> getUsuarioPeloLogin(String login) {

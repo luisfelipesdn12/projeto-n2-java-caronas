@@ -14,6 +14,8 @@ public class Menu {
         this.validador = new Validador();
         this.repositorio = repositorio;
         this.usuarioLogado = Optional.ofNullable(null);
+
+        this.usuarioLogado  = Optional.of(new Passageiro("Ana Silva", "Rua das Flores, 123", "ana.silva@email.com", "(11) 98765-4321", "anasilva", "123456"));
     }
 
     private void mostrarCabecalho() {
@@ -35,9 +37,9 @@ public class Menu {
         scanner.nextLine();
     }
 
-    private int escolhaDeOpcao(ArrayList<String> opcoes) {
+    private int escolhaDeOpcao(ArrayList<? extends Object> opcoes) {
         for (int i = 0; i < opcoes.size(); i++) {
-            System.out.println((i + 1) + ". " + opcoes.get(i));
+            System.out.println((i + 1) + ". " + opcoes.get(i).toString());
         }
 
         int opcao = 0;
@@ -161,7 +163,7 @@ public class Menu {
         return locais;
     }
 
-    public void cadastrarViagem(){
+    public void cadastrarViagem() {
         limparTerminal();
         mostrarCabecalho();
         System.out.print("Digite o ponto x do local de partida: ");
@@ -177,14 +179,41 @@ public class Menu {
         int lugares = scanner.nextInt();
         Local partida = new Local(xPartida, yPartida);
         Local destino = new Local(xDestino, yDestino);
-        Viagem viagem = new Viagem(partida, destino, trajeto, lugares);
+        Viagem viagem = new Viagem(partida, destino, trajeto, lugares, (Motorista)usuarioLogado.get());
         repositorio.incluirViagem(viagem);
         System.out.println("Viagem cadastrada com sucesso!");
     }
 
-    public void listaViagens(){
+    public void buscarCarona() {
+        limparTerminal();
+        mostrarCabecalho();
+        System.out.print("Digite o ponto x do local de partida: ");
+        int xPartida = scanner.nextInt();
+        System.out.print("Digite o ponto y do local de partida: ");
+        int yPartida = scanner.nextInt();
+        System.out.print("Digite o ponto x do local de destino: ");
+        int xDestino = scanner.nextInt();
+        System.out.print("Digite o ponto y do local de destino: ");
+        int yDestino = scanner.nextInt();
+        
+        Local partida = new Local(xPartida, yPartida);
+        Local destino = new Local(xDestino, yDestino);
+
+        ArrayList<Viagem> viagensCompativeis = repositorio.getTodasAsViagensCompativeis(partida, destino);
+
+        if (viagensCompativeis.isEmpty()) {
+            System.out.println("Nenhuma viagem encontrada...");
+        } else {
+            listarViagens(viagensCompativeis);
+            int viagemEscolhida = escolhaDeOpcao(viagensCompativeis);
+            viagensCompativeis.get(viagemEscolhida - 1).embarque((Passageiro)usuarioLogado.get());
+        }
+    }
+
+    public void listarViagens(ArrayList<Viagem> viagens) {
+        System.out.println();
         int viagemAtual = 1;
-        for (Viagem viagem : repositorio.getTodasAsViagens()){
+        for (Viagem viagem : viagens){
             int parada = 1;
             System.out.printf("========== Viagem %d ==========\n", viagemAtual);
             System.out.printf("Local de partida: %s\n", viagem.getPartida().toString());
@@ -198,6 +227,11 @@ public class Menu {
             System.out.println("");
             viagemAtual += 1;
         }
+    }
+
+    public void listarViagensAnteriores() {
+        ArrayList<Viagem> viagens = repositorio.getTodasAsViagensDoPassageiro(usuarioLogado.get());
+        listarViagens(viagens);
     }
 
     public void mostrarInicioLogado() {
@@ -236,13 +270,13 @@ public class Menu {
                                 " (passageiro)\n");
                 opcao = escolhaDeOpcao(new ArrayList<>(Arrays.asList(
                     "Buscar carona",
-                    "Listar viagens",
+                    "Listar viagens anteriores",
                     "Sair"
                 )));
                 if (opcao == 1){
-                    System.out.println("Teste opcao 1");
+                    buscarCarona();
                 } else if (opcao == 2 ){
-                    listaViagens();
+                    listarViagensAnteriores();
                 } else if (opcao == 3) {
                     System.out.println("Teste opcao 3");
                     break;

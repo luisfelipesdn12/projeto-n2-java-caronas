@@ -11,16 +11,18 @@ public class Viagem {
      * desembarque de outros passageiros.
      */
     private ArrayList<Local> trajeto;
+    private Motorista motorista;
     private ArrayList<Passageiro> passageiros;
     private Avaliacao avaliacao;
     private Local partida;
     private Local destino;
 
-    public Viagem(Local partida, Local destino, ArrayList<Local> trajeto, int lugares){
+    public Viagem(Local partida, Local destino, ArrayList<Local> trajeto, int lugares, Motorista motorista){
         this.partida = partida;
         this.destino = destino;
         this.trajeto = trajeto;
         this.lugares = lugares;
+        this.motorista = motorista;
         passageiros = new ArrayList<Passageiro>();
     }
 
@@ -54,5 +56,22 @@ public class Viagem {
 
     public int getLugares(){
         return lugares;
+    }
+    
+    public ArrayList<Passageiro> getPassageiros() {
+        return passageiros;
+    }
+
+    public boolean temLugaresDisponiveis() {
+        return passageiros.size() < lugares;
+    }
+
+    public int lugaresDisponiveis() {
+        return lugares - passageiros.size();
+    }
+
+    @Override
+    public String toString() {
+        return "Viagem de (" + partida.toString() + ") para (" + destino.toString() + ") com " + lugaresDisponiveis() + " lugares disponíveis.";
     }
 }
