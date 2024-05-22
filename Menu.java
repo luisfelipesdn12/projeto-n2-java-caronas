@@ -376,6 +376,8 @@ public class Menu {
 
         int opcao;
 
+        System.out.println(usuarioLogado.get().toStringComplete());
+
         switch (usuarioLogado.get().getTipoUsuario()) {
             case MOTORISTA:
                 System.out.println(
@@ -400,6 +402,7 @@ public class Menu {
                     this.usuarioLogado = Optional.ofNullable(null);
                     return;
                 }
+                break;
 
             case PASSAGEIRO:
                 System.out.println(
@@ -426,6 +429,7 @@ public class Menu {
                     this.usuarioLogado = Optional.ofNullable(null);
                     return;
                 }
+                break;
 
             default:
                 break;

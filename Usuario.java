@@ -44,4 +44,14 @@ public class Usuario {
             email + " - " +
             telefone;
     }
+
+    String toStringComplete() {
+        return "nome: " + nome +
+            "\nendereco: " + endereco +
+            "\nemail: " + email +
+            "\ntelefone: " + telefone +
+            "\nlogin: " + login +
+            "\nsenha: " + senha +
+            "\ntipoUsuario: " + tipoUsuario;
+    }
 }
